@@ -1,4 +1,9 @@
 from flask import Flask, request, jsonify
+import psycopg2
+
+conn = psycopg2.connect(host='159.69.151.133', port='5056', dbname='db_19_lag', user='u_19_lag', password='123')
+cursor = conn.cursor()
+
 
 app = Flask(__name__)
 
@@ -70,3 +75,29 @@ def postreq():
     resp = [name, ageup]
     return jsonify(resp)
 
+@approute('/second', methods=['GET'])
+def second():
+
+    query = 'SELECT * FROM public.courses;'
+
+    resp = {}
+    if conn:
+        cursor.execute(query)
+        result = cursor.fetcall()
+
+        for i in result:
+
+            name_key - 'name' + str(i[0])
+
+            resp[name_key] = {'name': i[0],
+                              'price': i[1]
+                              }
+            # print('Name = ', i[1])
+            # print('Price = ', i[2])
+
+    # print('resp', resp)
+
+        return jsonify(resp)
+
+    else:
+        return 'DB connection error'
